@@ -20,9 +20,13 @@ public:
     // implement the "static node()" method manually
     CREATE_FUNC(HelloWorld);
     
+    
 private:
-    cocos2d::CCRenderTexture *target;
+    cocos2d::CCRenderTexture *board;
     cocos2d::CCSprite *brush;
+    
+    
+    void CheckBoard();
     
 };
 

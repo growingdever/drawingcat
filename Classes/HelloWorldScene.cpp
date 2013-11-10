@@ -1,4 +1,5 @@
 #include "HelloWorldScene.h"
+#import <opencv2/opencv.hpp>
 
 USING_NS_CC;
 
@@ -53,10 +54,11 @@ bool HelloWorld::init()
     CCMenuItemFont *pCheckButton = CCMenuItemFont::create("CHECK BOARD",
                                                           this,
                                                           menu_selector(HelloWorld::menuCloseCallback));
+    pCheckButton->setPosition( ccp( pCheckButton->getContentSize().width/2, visibleSize.height - 100) );
     pCheckButton->setTag(3);
 
     // create menu, it's an autorelease object
-    CCMenu* pMenu = CCMenu::create(pCloseItem, pClearButton, NULL);
+    CCMenu* pMenu = CCMenu::create(pCloseItem, pClearButton, pCheckButton, NULL);
     pMenu->setPosition(CCPointZero);
     this->addChild(pMenu, 1);
 
@@ -66,12 +68,12 @@ bool HelloWorld::init()
     // add a label shows "Hello World"
     // create and initialize a label
 
-    target = CCRenderTexture::create(visibleSize.width, visibleSize.height,
+    board = CCRenderTexture::create(visibleSize.width, visibleSize.height,
                                      kCCTexture2DPixelFormat_RGBA8888);
-    target->retain();
-    target->setPosition(ccp(visibleSize.width / 2, visibleSize.height / 2));
+    board->retain();
+    board->setPosition(ccp(visibleSize.width / 2, visibleSize.height / 2));
     
-    this->addChild(target);
+    this->addChild(board);
     
     brush = CCSprite::create("mybrush.png");
     brush->retain();
@@ -88,12 +90,12 @@ void HelloWorld::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
     CCPoint location = touch->getLocationInView();
     location = CCDirector::sharedDirector()->convertToGL(location);
     
-    target->begin();
+    board->begin();
     
     brush->setPosition(location);
     brush->visit();
     
-    target->end();
+    board->end();
 }
 
 
@@ -109,14 +111,73 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
             break;
             
         case 2: // clear button
-            target->clear(0, 0, 0, 1);
+            board->clear(0, 0, 0, 1);
             break;
             
         case 3: // check button
-            
+            CheckBoard();
             break;
             
         default:
             break;
     }
+}
+
+void HelloWorld::CheckBoard()
+{
+	const char *BOARD_IMAGE_PATH = "board_content.png";
+	const char *RESULT_IMAGE_PATH = "check_result.png";
+	
+    CCImage *texImg = board->newCCImage();
+	texImg->saveToFile(BOARD_IMAGE_PATH);
+	
+	IplImage *src_image = cvLoadImage( BOARD_IMAGE_PATH, CV_LOAD_IMAGE_UNCHANGED );
+	IplImage *dst = cvCreateImage( cvGetSize(src_image), 8, 1 );
+	IplImage *gray = cvCreateImage( cvGetSize(src_image), 8, 1 );
+	IplImage *color_dst = cvCreateImage( cvGetSize(src_image), 8, 3 );
+	CvMemStorage* storage = cvCreateMemStorage(0);
+	CvSeq* lines = 0;
+	int i;
+	cvCvtColor( src_image, gray, CV_BGR2GRAY );//그레이 이미지로 변환
+	cvCanny( gray, dst, 50, 200, 3 );//경계선 이미지로 변환(이진화)
+	cvCvtColor( dst, color_dst, CV_GRAY2BGR );
+	
+	//CV_HOUGH_STANDARD모드
+	/*
+	 lines = cvHoughLines2( dst, storage, CV_HOUGH_STANDARD, 1, CV_PI/180, 100, 0, 0 );
+	 for( i = 0; i < MIN(lines->total,100); i++ )
+	 {    //추출 된 직선의 특징을 여기서 찾아낼 수 있다.
+	 float* line = (float*)cvGetSeqElem(lines,i);
+	 float rho = line[0];
+	 float theta = line[1];
+	 CvPoint pt1, pt2;
+	 double a = cos(theta), b = sin(theta);
+	 double x0 = a*rho, y0 = b*rho;
+	 pt1.x = cvRound(x0 + 1000*(-b));
+	 pt1.y = cvRound(y0 + 1000*(a));
+	 pt2.x = cvRound(x0 - 1000*(-b));
+	 pt2.y = cvRound(y0 - 1000*(a));
+	 cvLine( color_dst, pt1, pt2, CV_RGB(255,0,0), 3, 8 );
+	 }
+	 */
+	//CV_HOUGH_PROBABILISTIC 모드
+	lines = cvHoughLines2( dst, storage, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, 50, 50, 5 );
+	for( i = 0; i < lines->total; i++ )
+	{     //추출 된 직선의 특징을 여기서 찾아낼 수 있다.
+		CvPoint* line = (CvPoint*)cvGetSeqElem(lines,i);
+		cvLine( color_dst, line[0], line[1], CV_RGB(255,0,0), 3, 8 );
+	}
+	cvSaveImage(RESULT_IMAGE_PATH, color_dst);
+	
+	CCSprite *result = CCSprite::create(RESULT_IMAGE_PATH);
+	result->setPosition( ccp(100, 100) );
+	this->addChild(result);
+
+//    unsigned char *data = texImg->getData();
+//    
+//	CCTexture2D *tex = board->getSprite()->getTexture();
+	
+	
+	
+//	IplImage *src = cvLoadImage(<#const char *filename#>)
 }
