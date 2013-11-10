@@ -1,0 +1,21 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+
+*.sdf
+*.suo
+*.opensdf
+
+**/proj.win32/Debug.win32/
+proj.win32/Debug.win32/
