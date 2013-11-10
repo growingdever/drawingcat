@@ -27,8 +27,8 @@ bool HelloWorld::init()
         return false;
     }
     
-    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
+    _visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+    _origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -40,20 +40,20 @@ bool HelloWorld::init()
                                         "CloseSelected.png",
                                         this,
                                         menu_selector(HelloWorld::menuCloseCallback));
-	pCloseItem->setPosition(ccp(origin.x + visibleSize.width - pCloseItem->getContentSize().width/2 ,
-                                origin.y + pCloseItem->getContentSize().height/2));
+	pCloseItem->setPosition(ccp(_origin.x + _visibleSize.width - pCloseItem->getContentSize().width/2 ,
+                                _origin.y + pCloseItem->getContentSize().height/2));
     pCloseItem->setTag(1);
     
     CCMenuItemFont *pClearButton = CCMenuItemFont::create("CLEAR BOARD",
                                                           this,
                                                           menu_selector(HelloWorld::menuCloseCallback));
-    pClearButton->setPosition( ccp( pClearButton->getContentSize().width/2, visibleSize.height - 50) );
+    pClearButton->setPosition( ccp( pClearButton->getContentSize().width/2, _visibleSize.height - 50) );
     pClearButton->setTag(2);
     
     CCMenuItemFont *pCheckButton = CCMenuItemFont::create("CHECK BOARD",
                                                           this,
                                                           menu_selector(HelloWorld::menuCloseCallback));
-    pCheckButton->setPosition( ccp( pCheckButton->getContentSize().width/2, visibleSize.height - 100) );
+    pCheckButton->setPosition( ccp( pCheckButton->getContentSize().width/2, _visibleSize.height - 100) );
     pCheckButton->setTag(3);
 
     // create menu, it's an autorelease object
@@ -67,10 +67,10 @@ bool HelloWorld::init()
     // add a label shows "Hello World"
     // create and initialize a label
 
-    board = CCRenderTexture::create(visibleSize.width, visibleSize.height,
+    board = CCRenderTexture::create(_visibleSize.width, _visibleSize.height,
                                      kCCTexture2DPixelFormat_RGBA8888);
     board->retain();
-    board->setPosition(ccp(visibleSize.width / 2, visibleSize.height / 2));
+    board->setPosition(ccp(_visibleSize.width / 2, _visibleSize.height / 2));
     
     this->addChild(board);
     
@@ -157,5 +157,24 @@ void HelloWorld::CheckBoard()
 	if( tolerate < 0 )
 		return;
 
-	CCMessageBox( "Success!", "System" );
+	//CCMessageBox( "Success!", "System" );
+
+	CCSprite *msg = CCSprite::create( "praise.png" );
+	msg->setPosition( ccp( _visibleSize.width/2, _visibleSize.height/2 ) );
+	msg->setZOrder( 10 );
+	msg->setScale( 0 );
+	msg->runAction( 
+		CCSequence::create( 
+			CCScaleTo::create( 0.3, 0.5 ), 
+			CCDelayTime::create( 0.5 ),
+			CCScaleTo::create( 0.2, 0 ), 
+			CCCallFuncN::create( this, callfuncN_selector(HelloWorld::afterShowingMessagebox) ), 
+			NULL ) );
+
+	this->addChild(msg);
+}
+
+void HelloWorld::afterShowingMessagebox(CCNode *pSender) 
+{
+	this->removeChild( pSender );
 }

@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include <vector>
 
+USING_NS_CC;
 using namespace std;
 
 class HelloWorld : public cocos2d::CCLayer
@@ -19,12 +20,17 @@ public:
     
     // a selector callback
     void menuCloseCallback(CCObject* pSender);
+
+	void afterShowingMessagebox(CCNode *pSender);
     
     // implement the "static node()" method manually
     CREATE_FUNC(HelloWorld);
     
     
 private:
+	CCSize _visibleSize;
+	CCPoint _origin;
+
     cocos2d::CCRenderTexture *board;
     cocos2d::CCSprite *brush;
 	vector<cocos2d::CCPoint> _touches;
