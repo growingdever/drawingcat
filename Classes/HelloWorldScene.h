@@ -2,6 +2,9 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include <vector>
+
+using namespace std;
 
 class HelloWorld : public cocos2d::CCLayer
 {
@@ -24,8 +27,9 @@ public:
 private:
     cocos2d::CCRenderTexture *board;
     cocos2d::CCSprite *brush;
-    
-    
+	vector<cocos2d::CCPoint> _touches;
+
+	
     void CheckBoard();
     
 };

@@ -1,5 +1,4 @@
 #include "HelloWorldScene.h"
-#import <opencv2/opencv.hpp>
 
 USING_NS_CC;
 
@@ -79,7 +78,9 @@ bool HelloWorld::init()
     brush->retain();
     
     this->setTouchEnabled(true);
-    
+
+	_touches.clear();
+
     return true;
 }
 
@@ -89,6 +90,8 @@ void HelloWorld::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
     CCTouch *touch = (CCTouch *)pTouches->anyObject();
     CCPoint location = touch->getLocationInView();
     location = CCDirector::sharedDirector()->convertToGL(location);
+	_touches.push_back(location);
+
     
     board->begin();
     
@@ -116,6 +119,8 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
             
         case 3: // check button
             CheckBoard();
+			_touches.clear();
+			board->clear(0, 0, 0, 1);
             break;
             
         default:
@@ -125,59 +130,32 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
 
 void HelloWorld::CheckBoard()
 {
-	const char *BOARD_IMAGE_PATH = "board_content.png";
-	const char *RESULT_IMAGE_PATH = "check_result.png";
-	
-    CCImage *texImg = board->newCCImage();
-	texImg->saveToFile(BOARD_IMAGE_PATH);
-	
-	IplImage *src_image = cvLoadImage( BOARD_IMAGE_PATH, CV_LOAD_IMAGE_UNCHANGED );
-	IplImage *dst = cvCreateImage( cvGetSize(src_image), 8, 1 );
-	IplImage *gray = cvCreateImage( cvGetSize(src_image), 8, 1 );
-	IplImage *color_dst = cvCreateImage( cvGetSize(src_image), 8, 3 );
-	CvMemStorage* storage = cvCreateMemStorage(0);
-	CvSeq* lines = 0;
-	int i;
-	cvCvtColor( src_image, gray, CV_BGR2GRAY );//그레이 이미지로 변환
-	cvCanny( gray, dst, 50, 200, 3 );//경계선 이미지로 변환(이진화)
-	cvCvtColor( dst, color_dst, CV_GRAY2BGR );
-	
-	//CV_HOUGH_STANDARD모드
-	/*
-	 lines = cvHoughLines2( dst, storage, CV_HOUGH_STANDARD, 1, CV_PI/180, 100, 0, 0 );
-	 for( i = 0; i < MIN(lines->total,100); i++ )
-	 {    //추출 된 직선의 특징을 여기서 찾아낼 수 있다.
-	 float* line = (float*)cvGetSeqElem(lines,i);
-	 float rho = line[0];
-	 float theta = line[1];
-	 CvPoint pt1, pt2;
-	 double a = cos(theta), b = sin(theta);
-	 double x0 = a*rho, y0 = b*rho;
-	 pt1.x = cvRound(x0 + 1000*(-b));
-	 pt1.y = cvRound(y0 + 1000*(a));
-	 pt2.x = cvRound(x0 - 1000*(-b));
-	 pt2.y = cvRound(y0 - 1000*(a));
-	 cvLine( color_dst, pt1, pt2, CV_RGB(255,0,0), 3, 8 );
-	 }
-	 */
-	//CV_HOUGH_PROBABILISTIC 모드
-	lines = cvHoughLines2( dst, storage, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, 50, 50, 5 );
-	for( i = 0; i < lines->total; i++ )
-	{     //추출 된 직선의 특징을 여기서 찾아낼 수 있다.
-		CvPoint* line = (CvPoint*)cvGetSeqElem(lines,i);
-		cvLine( color_dst, line[0], line[1], CV_RGB(255,0,0), 3, 8 );
-	}
-	cvSaveImage(RESULT_IMAGE_PATH, color_dst);
-	
-	CCSprite *result = CCSprite::create(RESULT_IMAGE_PATH);
-	result->setPosition( ccp(100, 100) );
-	this->addChild(result);
+	// 일단 가로줄 긋기 검증부터 먼저 만들어본다.
 
-//    unsigned char *data = texImg->getData();
-//    
-//	CCTexture2D *tex = board->getSprite()->getTexture();
+	int size = _touches.size();
+	if( size < 1 )
+		return;
+
+	CCPoint start = _touches[0];
+	CCPoint end = _touches[size-1];
 	
-	
-	
-//	IplImage *src = cvLoadImage(<#const char *filename#>)
+	// 선이 기울어져 있으면 가로줄 긋기 실패
+	if( abs(start.y - end.y) > 50 )
+		return;
+
+	int averageY = (start.y + end.y)/2;
+
+	// 각각의 점들 오차율을 확인
+	int tolerate = 300;
+	int i;
+	for( i=0; i<size; i++ ) {
+		CCPoint pos = _touches[i];
+		tolerate -= abs(averageY - pos.y);
+	}
+
+	CCLog( "Diff : %d", tolerate );
+	if( tolerate < 0 )
+		return;
+
+	CCMessageBox( "Success!", "System" );
 }
