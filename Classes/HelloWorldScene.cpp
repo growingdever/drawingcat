@@ -47,17 +47,29 @@ bool HelloWorld::init()
     CCMenuItemFont *pClearButton = CCMenuItemFont::create("CLEAR BOARD",
                                                           this,
                                                           menu_selector(HelloWorld::menuCloseCallback));
+	pClearButton->setFontNameObj("fonts/Moebius.ttf");
+	pClearButton->setFontSizeObj(16);
     pClearButton->setPosition( ccp( pClearButton->getContentSize().width/2, _visibleSize.height - 50) );
     pClearButton->setTag(2);
     
     CCMenuItemFont *pCheckButton = CCMenuItemFont::create("CHECK BOARD",
                                                           this,
                                                           menu_selector(HelloWorld::menuCloseCallback));
-    pCheckButton->setPosition( ccp( pCheckButton->getContentSize().width/2, _visibleSize.height - 100) );
+	pCheckButton->setFontNameObj("fonts/Moebius.ttf");
+	pCheckButton->setFontSizeObj(16);
+    pCheckButton->setPosition( ccp( pCheckButton->getContentSize().width/2, _visibleSize.height - 70) );
     pCheckButton->setTag(3);
+	
+	CCMenuItemFont *pCheckButton2 = CCMenuItemFont::create("CHECK BOARD2",
+                                                          this,
+                                                          menu_selector(HelloWorld::menuCloseCallback));
+	pCheckButton2->setFontNameObj("fonts/Moebius.ttf");
+	pCheckButton2->setFontSizeObj(16);
+    pCheckButton2->setPosition( ccp( pCheckButton->getContentSize().width/2, _visibleSize.height - 90) );
+    pCheckButton2->setTag(4);
 
     // create menu, it's an autorelease object
-    CCMenu* pMenu = CCMenu::create(pCloseItem, pClearButton, pCheckButton, NULL);
+    CCMenu* pMenu = CCMenu::create(pCloseItem, pClearButton, pCheckButton, pCheckButton2, NULL);
     pMenu->setPosition(CCPointZero);
     this->addChild(pMenu, 1);
 
@@ -122,6 +134,12 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
 			_touches.clear();
 			board->clear(0, 0, 0, 1);
             break;
+			
+		case 4:
+			CheckBoard2();
+			_touches.clear();
+			board->clear(0, 0, 0, 1);
+			break;
             
         default:
             break;
@@ -140,7 +158,7 @@ void HelloWorld::CheckBoard()
 	CCPoint end = _touches[size-1];
 	
 	// 선이 기울어져 있으면 가로줄 긋기 실패
-	if( abs(start.y - end.y) > 50 )
+	if( fabs(start.y - end.y) > 50 )
 		return;
 
 	int averageY = (start.y + end.y)/2;
@@ -150,7 +168,7 @@ void HelloWorld::CheckBoard()
 	int i;
 	for( i=0; i<size; i++ ) {
 		CCPoint pos = _touches[i];
-		tolerate -= abs(averageY - pos.y);
+		tolerate -= fabs(averageY - pos.y);
 	}
 
 	CCLog( "Diff : %d", tolerate );
@@ -171,6 +189,52 @@ void HelloWorld::CheckBoard()
 			CCCallFuncN::create( this, callfuncN_selector(HelloWorld::afterShowingMessagebox) ), 
 			NULL ) );
 
+	this->addChild(msg);
+}
+
+void HelloWorld::CheckBoard2()
+{
+	// 일단 가로줄 긋기 검증부터 먼저 만들어본다.
+	
+	int size = _touches.size();
+	if( size < 1 )
+		return;
+	
+	CCPoint start = _touches[0];
+	CCPoint end = _touches[size-1];
+	
+	// 선이 기울어져 있으면 가로줄 긋기 실패
+	if( fabs(start.x - end.x) > 50 )
+		return;
+	
+	int averageX = (start.x + end.x)/2;
+	
+	// 각각의 점들 오차율을 확인
+	int tolerate = 300;
+	int i;
+	for( i=0; i<size; i++ ) {
+		CCPoint pos = _touches[i];
+		tolerate -= fabs(averageX - pos.x);
+	}
+	
+	CCLog( "Diff : %d", tolerate );
+	if( tolerate < 0 )
+		return;
+	
+	//CCMessageBox( "Success!", "System" );
+	
+	CCSprite *msg = CCSprite::create( "praise.png" );
+	msg->setPosition( ccp( _visibleSize.width/2, _visibleSize.height/2 ) );
+	msg->setZOrder( 10 );
+	msg->setScale( 0 );
+	msg->runAction(
+				   CCSequence::create(
+									  CCScaleTo::create( 0.3, 0.5 ),
+									  CCDelayTime::create( 0.5 ),
+									  CCScaleTo::create( 0.2, 0 ),
+									  CCCallFuncN::create( this, callfuncN_selector(HelloWorld::afterShowingMessagebox) ),
+									  NULL ) );
+	
 	this->addChild(msg);
 }
 

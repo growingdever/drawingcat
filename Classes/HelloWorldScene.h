@@ -37,6 +37,7 @@ private:
 
 	
     void CheckBoard();
+	void CheckBoard2();
     
 };
 
