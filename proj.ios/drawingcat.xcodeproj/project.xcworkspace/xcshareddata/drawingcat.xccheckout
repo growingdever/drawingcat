@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>B0A8C8CA-FE59-4A63-A238-560B7A4F2274</string>
+	<key>IDESourceControlProjectName</key>
+	<string>drawingcat</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>71AB8CA3-D356-4048-9B5F-77B90DD254C9</key>
+		<string>https://bitbucket.org/growingdever/drawingcat</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>proj.ios/drawingcat.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>71AB8CA3-D356-4048-9B5F-77B90DD254C9</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://bitbucket.org/growingdever/drawingcat</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>71AB8CA3-D356-4048-9B5F-77B90DD254C9</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>71AB8CA3-D356-4048-9B5F-77B90DD254C9</string>
+			<key>IDESourceControlWCCName</key>
+			<string>drawingcat</string>
+		</dict>
+	</array>
+</dict>
+</plist>

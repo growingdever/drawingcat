@@ -240,6 +240,11 @@
 		41BC70E615BF81A5006A0A6C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41BC70DE15BF81A5006A0A6C /* MainMenu.xib */; };
 		41BC70E715BF81A5006A0A6C /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 41BC70E015BF81A5006A0A6C /* Icon.icns */; };
 		41BC70E815BF81A5006A0A6C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 41BC70E115BF81A5006A0A6C /* main.m */; };
+		7840F8531831EBC20013E667 /* praise.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840F84E1831EBC20013E667 /* praise.png */; };
+		7840F8541831EBC20013E667 /* mybrush.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840F84F1831EBC20013E667 /* mybrush.png */; };
+		7840F8551831EBC20013E667 /* Marker Felt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7840F8511831EBC20013E667 /* Marker Felt.ttf */; };
+		7840F8561831EBC20013E667 /* yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840F8521831EBC20013E667 /* yellow.png */; };
+		7840F8581831ECE90013E667 /* Moebius.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7840F8571831ECE90013E667 /* Moebius.ttf */; };
 		8C583FAD169DB6D500F63A10 /* CCEditBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C583FA8169DB6D500F63A10 /* CCEditBox.cpp */; };
 		8C583FAE169DB6D500F63A10 /* CCEditBoxImplMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C583FAC169DB6D500F63A10 /* CCEditBoxImplMac.mm */; };
 /* End PBXBuildFile section */
@@ -725,6 +730,11 @@
 		41BC70E115BF81A5006A0A6C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		41BC70E215BF81A5006A0A6C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		41BC70E315BF81A5006A0A6C /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
+		7840F84E1831EBC20013E667 /* praise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = praise.png; sourceTree = "<group>"; };
+		7840F84F1831EBC20013E667 /* mybrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mybrush.png; sourceTree = "<group>"; };
+		7840F8511831EBC20013E667 /* Marker Felt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Marker Felt.ttf"; sourceTree = "<group>"; };
+		7840F8521831EBC20013E667 /* yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow.png; sourceTree = "<group>"; };
+		7840F8571831ECE90013E667 /* Moebius.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Moebius.ttf; sourceTree = "<group>"; };
 		8C583FA8169DB6D500F63A10 /* CCEditBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCEditBox.cpp; path = CCEditBox/CCEditBox.cpp; sourceTree = "<group>"; };
 		8C583FA9169DB6D500F63A10 /* CCEditBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCEditBox.h; path = CCEditBox/CCEditBox.h; sourceTree = "<group>"; };
 		8C583FAA169DB6D500F63A10 /* CCEditBoxImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCEditBoxImpl.h; path = CCEditBox/CCEditBoxImpl.h; sourceTree = "<group>"; };
@@ -1662,9 +1672,22 @@
 			path = en.lproj;
 			sourceTree = SOURCE_ROOT;
 		};
+		7840F8501831EBC20013E667 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				7840F8571831ECE90013E667 /* Moebius.ttf */,
+				7840F8511831EBC20013E667 /* Marker Felt.ttf */,
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7840F84E1831EBC20013E667 /* praise.png */,
+				7840F84F1831EBC20013E667 /* mybrush.png */,
+				7840F8501831EBC20013E667 /* fonts */,
+				7840F8521831EBC20013E667 /* yellow.png */,
 				1AFAF8C016D3884900DB1158 /* CloseNormal.png */,
 				1AFAF8C116D3884900DB1158 /* CloseSelected.png */,
 				1AFAF8C216D3884900DB1158 /* HelloWorld.png */,
@@ -1757,13 +1780,18 @@
 			files = (
 				41BC70E515BF81A5006A0A6C /* InfoPlist.strings in Resources */,
 				41BC70E615BF81A5006A0A6C /* MainMenu.xib in Resources */,
+				7840F8551831EBC20013E667 /* Marker Felt.ttf in Resources */,
+				7840F8541831EBC20013E667 /* mybrush.png in Resources */,
 				41BC70E715BF81A5006A0A6C /* Icon.icns in Resources */,
 				15C157DA168315B300D239F2 /* CMakeLists.txt in Resources */,
 				1AFAF8C316D3884900DB1158 /* CloseNormal.png in Resources */,
+				7840F8561831EBC20013E667 /* yellow.png in Resources */,
 				1AFAF8C416D3884900DB1158 /* CloseSelected.png in Resources */,
 				1AFAF8C516D3884900DB1158 /* HelloWorld.png in Resources */,
 				379BBAAF17F03FDE00829B88 /* json_internalarray.inl in Resources */,
+				7840F8581831ECE90013E667 /* Moebius.ttf in Resources */,
 				379BBAB017F03FDE00829B88 /* json_internalmap.inl in Resources */,
+				7840F8531831EBC20013E667 /* praise.png in Resources */,
 				379BBAB317F03FDE00829B88 /* json_valueiterator.inl in Resources */,
 				379BBAB517F03FDE00829B88 /* sconscript in Resources */,
 			);
@@ -2025,6 +2053,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
@@ -2054,7 +2083,7 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../cocos2dx/platform/third_party/mac/libraries\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "-O2";
 				PRODUCT_NAME = drawingcat;
 				SDKROOT = macosx;
@@ -2067,6 +2096,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
@@ -2094,7 +2124,7 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../cocos2dx/platform/third_party/mac/libraries\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = drawingcat;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "";
