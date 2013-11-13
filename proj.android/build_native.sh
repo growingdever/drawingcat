@@ -1,4 +1,5 @@
 APPNAME="drawingcat"
+NDK_ROOT="/Users/jungjuhong/Documents/Programming/android-ndk-r8e"
 
 # options
 
