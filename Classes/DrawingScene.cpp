@@ -141,13 +141,17 @@ bool DrawingScene::init()
     // create and initialize a label
 
 	LoadData();
+	_checkPointSpriteArray = CCArray::create();
+	_checkPointSpriteArray->retain();
 	int i, j;
 	for( i=0; i<_vertexInRoute.size(); i++ ) {
 		CCSprite *spr = CCSprite::create( "checkpoint.png" );
 		spr->setAnchorPoint( ccp( 0.5, 0.5 ) );
 		spr->setPosition( CCDirector::sharedDirector()->convertToGL(_vertexInRoute[i]) );
 		this->addChild( spr, 11 );
+		_checkPointSpriteArray->addObject( spr );
 	}
+	_nextVertexIndex = 0;
 
     board = CCRenderTexture::create(_visibleSize.width, _visibleSize.height,
                                      kCCTexture2DPixelFormat_RGBA8888);
@@ -217,6 +221,27 @@ void DrawingScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 	
 	location.y = _visibleSize.height - location.y;
 	_touches.push_back(location);
+
+	
+	if( _nextVertexIndex >= _vertexInRoute.size() )
+		return;
+
+	// It should be use NEW CCLAYER
+	CCPoint nextVertex = _vertexInRoute[_nextVertexIndex];
+	CCRect vertexCollisionCheckRect = CCRectMake( nextVertex.x - 32, nextVertex.y - 32, 64, 64 );
+	if( vertexCollisionCheckRect.containsPoint( location ) ) {
+		CCLog( "containsPoint" );
+		CCSprite *old = dynamic_cast<CCSprite*>(_checkPointSpriteArray->objectAtIndex( _nextVertexIndex ));
+		_checkPointSpriteArray->removeObjectAtIndex( _nextVertexIndex );
+		this->removeChild( old, 11 );
+
+		CCSprite *newSpr = CCSprite::create( "checkpoint_passed.png" );
+		newSpr->setPosition( CCDirector::sharedDirector()->convertToGL(_vertexInRoute[_nextVertexIndex] ) );
+		_checkPointSpriteArray->insertObject( newSpr, _nextVertexIndex );
+		this->addChild( newSpr, 11 );
+
+		_nextVertexIndex ++;
+	}
 }
 
 

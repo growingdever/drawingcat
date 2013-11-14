@@ -43,7 +43,10 @@ private:
 
 
 	vector<cocos2d::CCPoint> _touches;
+
 	vector<cocos2d::CCPoint> _vertexInRoute;
+	int _nextVertexIndex;
+	cocos2d::CCArray *_checkPointSpriteArray;
 
     void CheckBoard();
     
