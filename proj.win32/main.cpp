@@ -16,6 +16,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     AppDelegate app;
     CCEGLView* eglView = CCEGLView::sharedOpenGLView();
     eglView->setViewName("drawingcat");
-    eglView->setFrameSize(960, 640);
+    eglView->setFrameSize(1280, 720);
     return CCApplication::sharedApplication()->run();
 }
