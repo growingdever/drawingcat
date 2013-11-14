@@ -144,7 +144,8 @@ bool DrawingScene::init()
 	int i, j;
 	for( i=0; i<_vertexInRoute.size(); i++ ) {
 		CCSprite *spr = CCSprite::create( "checkpoint.png" );
-		spr->setPosition( _vertexInRoute[i] );
+		spr->setAnchorPoint( ccp( 0.5, 0.5 ) );
+		spr->setPosition( CCDirector::sharedDirector()->convertToGL(_vertexInRoute[i]) );
 		this->addChild( spr, 11 );
 	}
 
