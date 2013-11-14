@@ -40,15 +40,15 @@ bool DrawCircleScene::init()
                                         "CloseSelected.png",
                                         this,
                                         menu_selector(DrawCircleScene::menuCloseCallback));
-	pCloseItem->setPosition(ccp(_origin.x + _visibleSize.width - pCloseItem->getContentSize().width/2 ,
-                                _origin.y + pCloseItem->getContentSize().height/2));
+	pCloseItem->setPosition(ccp(_origin.x + _visibleSize.width - pCloseItem->getContentSize().width/2, _origin.y + pCloseItem->getContentSize().height/2));
     pCloseItem->setTag(1);
     
     CCMenuItemFont *pClearButton = CCMenuItemFont::create("CLEAR BOARD",
                                                           this,
                                                           menu_selector(DrawCircleScene::menuCloseCallback));
 	pClearButton->setFontNameObj("fonts/Moebius.ttf");
-	pClearButton->setFontSizeObj(16);
+	pClearButton->setFontSizeObj(32);
+	pClearButton->setColor(ccc3( 0, 0, 0) );
     pClearButton->setPosition( ccp( pClearButton->getContentSize().width/2, _visibleSize.height - 50) );
     pClearButton->setTag(2);
     
@@ -56,8 +56,9 @@ bool DrawCircleScene::init()
                                                           this,
                                                           menu_selector(DrawCircleScene::menuCloseCallback));
 	pCheckButton->setFontNameObj("fonts/Moebius.ttf");
-	pCheckButton->setFontSizeObj(16);
-    pCheckButton->setPosition( ccp( pCheckButton->getContentSize().width/2, _visibleSize.height - 70) );
+	pCheckButton->setFontSizeObj(32);
+	pCheckButton->setColor(ccc3( 0, 0, 0) );
+    pCheckButton->setPosition( ccp( pCheckButton->getContentSize().width/2, _visibleSize.height - 100) );
     pCheckButton->setTag(3);
 	
 	// create menu, it's an autorelease object
