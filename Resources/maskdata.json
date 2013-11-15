@@ -1,7 +1,7 @@
 {
 	"data" : [
 		{
-			"mask_image" : "maskdata/mask_circle.png",
+			"mask_image" : "mask_circle.png",
 			"points" : [
 				{
 					"x" : 600,

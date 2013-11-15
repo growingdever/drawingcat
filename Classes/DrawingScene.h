@@ -32,12 +32,13 @@ public:
     
 private:
 	void LoadData();
+	void ResetCheckPoint();
 
 	CCSize _visibleSize;
 	CCPoint _origin;
 
-    cocos2d::CCRenderTexture *board;
-    cocos2d::CCSprite *brush;
+    cocos2d::CCRenderTexture *_board;
+    cocos2d::CCSprite *_brush;
 
 	bool _maskData[DEVICE_HEIGHT][DEVICE_WIDTH];
 

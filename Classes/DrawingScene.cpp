@@ -21,7 +21,7 @@ CCScene* DrawingScene::scene()
 
 void DrawingScene::LoadData() 
 { 
-	const char *pszFileName = "maskdata/maskdata.json";
+	const char *pszFileName = "maskdata.json";
 	unsigned long size = 0;
     const char* pData = 0;
 	int i, j;
@@ -85,6 +85,21 @@ void DrawingScene::LoadData()
     } while (0);
 }
 
+void DrawingScene::ResetCheckPoint()
+{
+	int i, j;
+	for( i=0; i<_checkPointSpriteArray->count(); i++ ) {
+		CCSprite *old = dynamic_cast<CCSprite*>(_checkPointSpriteArray->objectAtIndex( i ));
+		_checkPointSpriteArray->removeObjectAtIndex( i );
+		this->removeChild( old, 11 );
+		
+		CCSprite *newSpr = CCSprite::create( "checkpoint.png" );
+		newSpr->setPosition( CCDirector::sharedDirector()->convertToGL(_vertexInRoute[i] ) );
+		_checkPointSpriteArray->insertObject( newSpr, i );
+		this->addChild( newSpr, 11 );
+	}
+}
+
 // on "init" you need to initialize your instance
 bool DrawingScene::init()
 {
@@ -139,7 +154,22 @@ bool DrawingScene::init()
 
     // add a label shows "Hello World"
     // create and initialize a label
-
+	
+    _board = CCRenderTexture::create(_visibleSize.width, _visibleSize.height,
+                                     kCCTexture2DPixelFormat_RGBA8888);
+    _board->retain();
+    _board->setPosition(ccp(_visibleSize.width / 2, _visibleSize.height / 2));
+	_board->setZOrder(10);
+    this->addChild(_board);
+    
+    _brush = CCSprite::create("mybrush.png");
+    _brush->retain();
+	
+	CCSprite *back = CCSprite::create("note_background.png");
+	back->setPosition(ccp(_visibleSize.width/2, _visibleSize.height/2));
+	this->addChild(back, 0);
+	
+	
 	LoadData();
 	_checkPointSpriteArray = CCArray::create();
 	_checkPointSpriteArray->retain();
@@ -152,21 +182,6 @@ bool DrawingScene::init()
 		_checkPointSpriteArray->addObject( spr );
 	}
 	_nextVertexIndex = 0;
-
-    board = CCRenderTexture::create(_visibleSize.width, _visibleSize.height,
-                                     kCCTexture2DPixelFormat_RGBA8888);
-    board->retain();
-    board->setPosition(ccp(_visibleSize.width / 2, _visibleSize.height / 2));
-	board->setZOrder(10);
-    this->addChild(board);
-    
-    brush = CCSprite::create("mybrush.png");
-    brush->retain();
-	
-	
-	CCSprite *back = CCSprite::create("note_background.png");
-	back->setPosition(ccp(_visibleSize.width/2, _visibleSize.height/2));
-	this->addChild(back, 0);
 
 	
 	CCImage *visualImage = new CCImage;
@@ -212,12 +227,12 @@ void DrawingScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
     location = CCDirector::sharedDirector()->convertToGL(location);
 //	CCLog("TOUCH (%.2f %.2f)", location.x, location.y);
     
-    board->begin();
+    _board->begin();
     
-    brush->setPosition(location);
-    brush->visit();
+    _brush->setPosition(location);
+    _brush->visit();
     
-    board->end();
+    _board->end();
 	
 	location.y = _visibleSize.height - location.y;
 	_touches.push_back(location);
@@ -241,6 +256,9 @@ void DrawingScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 		this->addChild( newSpr, 11 );
 
 		_nextVertexIndex ++;
+		if( _nextVertexIndex >= _vertexInRoute.size() ) {
+			CheckBoard();
+		}
 	}
 }
 
@@ -257,13 +275,13 @@ void DrawingScene::menuCloseCallback(CCObject* pSender)
             break;
             
         case 2: // clear button
-            board->clear(0, 0, 0, 0);
+            _board->clear(0, 0, 0, 0);
             break;
             
         case 3: // check button
             CheckBoard();
 			_touches.clear();
-			board->clear(0, 0, 0, 0);
+			_board->clear(0, 0, 0, 0);
             break;
 
         default:
@@ -340,4 +358,7 @@ void DrawingScene::CheckBoard()
 void DrawingScene::afterShowingMessagebox(CCNode *pSender) 
 {
 	this->removeChild( pSender );
+	
+	CCScene *pScene = DrawingScene::scene();
+	CCDirector::sharedDirector()->replaceScene(CCTransitionPageTurn::create(1, pScene, true));
 }
