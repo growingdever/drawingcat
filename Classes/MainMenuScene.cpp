@@ -119,7 +119,6 @@ void MainMenuScene::menuClickCallback(CCObject* pSender)
 			break;
 			
 		case ID_BUTTON_CLOSE:
-			_messageBoxLayerSelectImage->setVisible(false);
 			_messageBoxLayer->setVisible(false);
 			break;
 
