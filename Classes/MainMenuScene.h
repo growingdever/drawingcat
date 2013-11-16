@@ -23,8 +23,10 @@ public:
 
     // a selector callback
     void menuClickCallback(CCObject* pSender);
+	void menuClickCallbackForSelectImage(CCObject* pSender);
 	
 	void SetMessageBoxNeedMoney();
+	void ShowMessageBoxSelectImage(int id);
 
     // implement the "static node()" method manually
     CREATE_FUNC(MainMenuScene);
@@ -35,6 +37,7 @@ private:
 	CCPoint _origin;
 	
 	cocos2d::CCLayer *_messageBoxLayer;
+	cocos2d::CCLayer *_messageBoxLayerSelectImage;
 };
 
 #endif // __MAINMENU_SCENE_H__

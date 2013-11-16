@@ -66,6 +66,7 @@ void DrawingScene::LoadData( int sceneID )
 		for( i = 0; i < data_count; i ++ ) {
 			cs::CSJsonDictionary *maskData = jsonDict->getSubItemFromArray( "data", i );
 			int id = maskData->getItemIntValue("id", 0);
+			CCLog("sceneid:%d   i:%d  id:%d", sceneID, i, id);
 			if( id == sceneID ) {
 				// Initialize mask data from mask image
 				const char *mask_image_path = maskData->getItemStringValue( "mask_image" );
@@ -102,6 +103,7 @@ void DrawingScene::LoadData( int sceneID )
 					
 					CC_SAFE_DELETE( point );
 				}
+				break;
 			}
 			CC_SAFE_DELETE(maskData);
 		}

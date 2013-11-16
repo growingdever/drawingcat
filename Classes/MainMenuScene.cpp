@@ -11,6 +11,9 @@ const int ID_BUTTON_DRAWING_FIGURE = 2;
 const int ID_BUTTON_DRAWING_HANGUL = 3;
 const int ID_BUTTON_DRAWING_ALPHABET = 4;
 
+const int SELECT_IMAGE_WIDTH = 160;
+const int SELECT_IMAGE_HEIGHT = 90;
+
 CCScene* MainMenuScene::scene()
 {
     // 'scene' is an autorelease object
@@ -85,7 +88,6 @@ bool MainMenuScene::init()
 	
 	SetMessageBoxNeedMoney();
 
-
     return true;
 }
 
@@ -101,10 +103,11 @@ void MainMenuScene::menuClickCallback(CCObject* pSender)
     int tag = ((CCNode*)pSender)->getTag();
     switch (tag) {
 		case ID_BUTTON_DRAWING_LINE:
-			CCDirector::sharedDirector()->replaceScene(CCTransitionPageTurn::create(1, DrawingScene::scene(1), false));
+			ShowMessageBoxSelectImage(ID_BUTTON_DRAWING_LINE);
 			break;
 			
 		case ID_BUTTON_DRAWING_FIGURE:
+			ShowMessageBoxSelectImage(ID_BUTTON_DRAWING_FIGURE);
 			break;
 			
 		case ID_BUTTON_DRAWING_HANGUL:
@@ -116,6 +119,7 @@ void MainMenuScene::menuClickCallback(CCObject* pSender)
 			break;
 			
 		case ID_BUTTON_CLOSE:
+			_messageBoxLayerSelectImage->setVisible(false);
 			_messageBoxLayer->setVisible(false);
 			break;
 
@@ -147,4 +151,105 @@ void MainMenuScene::SetMessageBoxNeedMoney()
 	_messageBoxLayer->addChild(pMenu);
 	
 	_messageBoxLayer->setVisible(false);
+}
+
+
+void MainMenuScene::menuClickCallbackForSelectImage(CCObject *pSender)
+{
+	int tag = ((CCNode*)pSender)->getTag();
+	CCDirector::sharedDirector()->replaceScene(CCTransitionPageTurn::create(1, DrawingScene::scene(tag), false));
+}
+
+void MainMenuScene::ShowMessageBoxSelectImage(int id)
+{
+	CCLayer *msgbox = CCLayer::create();
+	msgbox->setPosition(_visibleSize/2);
+	this->addChild(msgbox, 10);
+	
+	CCSprite *back = CCSprite::create("messagebox_selectimage.png");
+	back->setPosition(CCPointZero);
+	msgbox->addChild(back);
+	
+	if( id == ID_BUTTON_DRAWING_LINE ) {
+		CCMenuItemImage *img1 = CCMenuItemImage::create("mask_1.png",
+														"mask_1.png",
+														this,
+														menu_selector(MainMenuScene::menuClickCallbackForSelectImage));
+		img1->setScale(1.0f / 8);
+		img1->setPosition(ccp(200, 250));
+		img1->setTag(1);
+		
+		CCMenuItemImage *img2 = CCMenuItemImage::create("mask_2.png",
+														"mask_2.png",
+														this,
+														menu_selector(MainMenuScene::menuClickCallbackForSelectImage));
+		img2->setScale(1.0f / 8);
+		img2->setPosition(ccp(380, 250));
+		img2->setTag(2);
+		
+		CCMenuItemImage *img3 = CCMenuItemImage::create("mask_5.png",
+														"mask_5.png",
+														this,
+														menu_selector(MainMenuScene::menuClickCallbackForSelectImage));
+		img3->setScale(1.0f / 8);
+		img3->setPosition(ccp(560, 250));
+		img3->setTag(5);
+		
+		CCMenuItemImage *img4 = CCMenuItemImage::create("mask_6.png",
+														"mask_6.png",
+														this,
+														menu_selector(MainMenuScene::menuClickCallbackForSelectImage));
+		img4->setScale(1.0f / 8);
+		img4->setPosition(ccp(740, 250));
+		img4->setTag(6);
+		
+		CCMenu *pMenu = CCMenu::create(img1, img2, img3, img4, NULL);
+		pMenu->setPosition(CCPointZero);
+		back->addChild(pMenu);
+		
+	} else if( id == ID_BUTTON_DRAWING_FIGURE ) {
+		CCMenuItemImage *img1 = CCMenuItemImage::create("mask_11.png",
+														"mask_11.png",
+														this,
+														menu_selector(MainMenuScene::menuClickCallbackForSelectImage));
+		img1->setScale(1.0f / 8);
+		img1->setPosition(ccp(200, 250));
+		img1->setTag(11);
+		
+		CCMenuItemImage *img2 = CCMenuItemImage::create("mask_12.png",
+														"mask_12.png",
+														this,
+														menu_selector(MainMenuScene::menuClickCallbackForSelectImage));
+		img2->setScale(1.0f / 8);
+		img2->setPosition(ccp(380, 250));
+		img2->setTag(12);
+		
+		CCMenuItemImage *img3 = CCMenuItemImage::create("mask_13.png",
+														"mask_13.png",
+														this,
+														menu_selector(MainMenuScene::menuClickCallbackForSelectImage));
+		img3->setScale(1.0f / 8);
+		img3->setPosition(ccp(560, 250));
+		img3->setTag(13);
+		
+		CCMenuItemImage *img4 = CCMenuItemImage::create("mask_14.png",
+														"mask_14.png",
+														this,
+														menu_selector(MainMenuScene::menuClickCallbackForSelectImage));
+		img4->setScale(1.0f / 8);
+		img4->setPosition(ccp(740, 250));
+		img4->setTag(14);
+		
+		CCMenuItemImage *img5 = CCMenuItemImage::create("mask_18.png",
+														"mask_18.png",
+														this,
+														menu_selector(MainMenuScene::menuClickCallbackForSelectImage));
+		img5->setScale(1.0f / 8);
+		img5->setPosition(ccp(200, 140));
+		img5->setTag(18);
+		
+		CCMenu *pMenu = CCMenu::create(img1, img2, img3, img4, img5, NULL);
+		pMenu->setPosition(CCPointZero);
+		back->addChild(pMenu);
+	}
 }
