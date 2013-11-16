@@ -23,7 +23,7 @@ public:
     void ccTouchesMoved(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent);
     
     // a selector callback
-    void menuCloseCallback(CCObject* pSender);
+    void menuClickCallback(CCObject* pSender);
 
 	void afterShowingMessagebox(CCNode *pSender);
     

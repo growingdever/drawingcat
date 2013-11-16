@@ -4,6 +4,9 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
+const int ID_BUTTON_RETRY = 4;
+const int ID_BUTTON_GOTOMENU = 5;
+
 CCScene* DrawingScene::scene()
 {
     // 'scene' is an autorelease object
@@ -128,34 +131,24 @@ bool DrawingScene::init()
 	_menuLayer->setPosition(CCPointZero);
 	this->addChild(_menuLayer, 10);
 	
-    CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
-                                        "CloseNormal.png",
-                                        "CloseSelected.png",
-                                        this,
-                                        menu_selector(DrawingScene::menuCloseCallback));
-	pCloseItem->setPosition(ccp(_origin.x + _visibleSize.width - pCloseItem->getContentSize().width/2, _origin.y + pCloseItem->getContentSize().height/2));
-    pCloseItem->setTag(1);
-    
-    CCMenuItemFont *pClearButton = CCMenuItemFont::create("CLEAR BOARD",
-                                                          this,
-                                                          menu_selector(DrawingScene::menuCloseCallback));
-	pClearButton->setFontNameObj("fonts/Moebius.ttf");
-	pClearButton->setFontSizeObj(32);
-	pClearButton->setColor(ccc3( 0, 0, 0) );
-    pClearButton->setPosition( ccp( pClearButton->getContentSize().width/2, _visibleSize.height - 50) );
-    pClearButton->setTag(2);
-    
-    CCMenuItemFont *pCheckButton = CCMenuItemFont::create("CHECK BOARD",
-                                                          this,
-                                                          menu_selector(DrawingScene::menuCloseCallback));
-	pCheckButton->setFontNameObj("fonts/Moebius.ttf");
-	pCheckButton->setFontSizeObj(32);
-	pCheckButton->setColor(ccc3( 0, 0, 0) );
-    pCheckButton->setPosition( ccp( pCheckButton->getContentSize().width/2, _visibleSize.height - 100) );
-    pCheckButton->setTag(3);
+	CCMenuItemImage *pRestartButton = CCMenuItemImage::create("retry.png",
+															  "retry-selected.png",
+															  this,
+															  menu_selector(DrawingScene::menuClickCallback));
+	pRestartButton->setPosition(ccp(_visibleSize.width - pRestartButton->getContentSize().width,
+									_visibleSize.height - pRestartButton->getContentSize().height));
+	pRestartButton->setTag(ID_BUTTON_RETRY);
+	
+	CCMenuItemImage *pGotoMenuButton = CCMenuItemImage::create("gotomenu.png",
+															   "gotomenu-selected.png",
+															   this,
+															   menu_selector(DrawingScene::menuClickCallback));
+	pGotoMenuButton->setPosition(ccp(_visibleSize.width - pGotoMenuButton->getContentSize().width,
+									_visibleSize.height - pGotoMenuButton->getContentSize().height * 2));
+	pGotoMenuButton->setTag(ID_BUTTON_GOTOMENU);
 	
 	// create menu, it's an autorelease object
-    CCMenu* pMenu = CCMenu::create(pCloseItem, pClearButton, pCheckButton, NULL);
+    CCMenu* pMenu = CCMenu::create(pRestartButton, pGotoMenuButton, NULL);
     pMenu->setPosition(CCPointZero);
     _menuLayer->addChild(pMenu, 10);
 	
@@ -279,7 +272,7 @@ void DrawingScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 }
 
 
-void DrawingScene::menuCloseCallback(CCObject* pSender)
+void DrawingScene::menuClickCallback(CCObject* pSender)
 {
     int tag = ((CCNode*)pSender)->getTag();
     switch (tag) {
@@ -299,6 +292,13 @@ void DrawingScene::menuCloseCallback(CCObject* pSender)
 			_touches.clear();
 			_board->clear(0, 0, 0, 0);
             break;
+			
+		case ID_BUTTON_RETRY:
+			Restart();
+			break;
+			
+		case ID_BUTTON_GOTOMENU:
+			break;
 
         default:
             break;
