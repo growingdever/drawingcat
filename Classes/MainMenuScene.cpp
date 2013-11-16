@@ -77,7 +77,7 @@ bool MainMenuScene::init()
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu);
 	
-	SetMessageBoxNeedMoney();
+//	SetMessageBoxNeedMoney();
 
 
     return true;

@@ -1,5 +1,6 @@
 #include "DrawingScene.h"
 #include "cocos-ext.h"
+#include "MainMenuScene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -318,6 +319,7 @@ void DrawingScene::menuClickCallback(CCObject* pSender)
 			break;
 			
 		case ID_BUTTON_GOTOMENU:
+			CCDirector::sharedDirector()->replaceScene(CCTransitionPageTurn::create(1, MainMenuScene::scene(), false));
 			break;
 
         default:
