@@ -7,23 +7,43 @@ USING_NS_CC_EXT;
 const int ID_BUTTON_RETRY = 4;
 const int ID_BUTTON_GOTOMENU = 5;
 
-CCScene* DrawingScene::scene()
+
+CCScene* DrawingScene::scene(int sceneID)
 {
     // 'scene' is an autorelease object
     CCScene *scene = CCScene::create();
     
     // 'layer' is an autorelease object
-    DrawingScene *layer = DrawingScene::create();
-
-    // add layer as a child to scene
-    scene->addChild(layer);
+//    DrawingScene *layer = DrawingScene::create();
+//	layer->LoadData(sceneID);
+//
+//    // add layer as a child to scene
+//    scene->addChild(layer);
+	
+	DrawingScene *pRet = new DrawingScene();
+    if (pRet)
+    {
+		pRet->LoadData(sceneID);
+		pRet->init();
+        pRet->autorelease();
+		scene->addChild(pRet);
+    }
+    else
+    {
+        delete pRet;
+        pRet = NULL;
+		
+        return NULL;
+    }
 
     // return the scene
     return scene;
 }
 
-void DrawingScene::LoadData() 
-{ 
+void DrawingScene::LoadData( int sceneID )
+{
+	_nowSceneID = sceneID;
+	
 	const char *pszFileName = "maskdata.json";
 	unsigned long size = 0;
     const char* pData = 0;
@@ -41,48 +61,49 @@ void DrawingScene::LoadData()
 
 		int data_count = jsonDict->getArrayItemCount( "data" );
 		
-		/*for( i = 0; i < data_count; i ++ ) {
-			jsonDict->getSubItemFromArray( "data", i );
-		}*/
-		cs::CSJsonDictionary *maskData = jsonDict->getSubItemFromArray( "data", 0 );
-		{
-			// Initialize mask data from mask image
-			const char *mask_image_path = maskData->getItemStringValue( "mask_image" );
-			CCImage *maskImage = new CCImage();
-			maskImage->initWithImageFile(mask_image_path);
-			int byte_num = 3;
-			if( maskImage->hasAlpha() )
-				byte_num++;
-			int w = maskImage->getWidth();
-			int h = maskImage->getHeight();
-			unsigned char *data = maskImage->getData();
-			memset( _maskData, 0, sizeof(_maskData) );
-			for( i=0; i<h; i++ )
-			{
-				for( j=0; j<w; j++ )
+		int id = 0;
+		for( i = 0; i < data_count; i ++ ) {
+			cs::CSJsonDictionary *maskData = jsonDict->getSubItemFromArray( "data", i );
+			int id = maskData->getItemIntValue("id", 0);
+			if( id == sceneID ) {
+				// Initialize mask data from mask image
+				const char *mask_image_path = maskData->getItemStringValue( "mask_image" );
+				CCImage *maskImage = new CCImage();
+				maskImage->initWithImageFile(mask_image_path);
+				int byte_num = 3;
+				if( maskImage->hasAlpha() )
+					byte_num++;
+				int w = maskImage->getWidth();
+				int h = maskImage->getHeight();
+				unsigned char *data = maskImage->getData();
+				memset( _maskData, 0, sizeof(_maskData) );
+				for( i=0; i<h; i++ )
 				{
-					unsigned char *pixel = data + (i * w + j) * byte_num;
-					unsigned char r = *pixel;
-			
-					if( r == 0 ) // if this pixel is black
-						_maskData[i][j] = 0;
-					else // if this pixel is white
-						_maskData[i][j] = 1;
+					for( j=0; j<w; j++ )
+					{
+						unsigned char *pixel = data + (i * w + j) * byte_num;
+						unsigned char r = *pixel;
+						
+						if( r == 0 ) // if this pixel is black
+							_maskData[i][j] = 0;
+						else // if this pixel is white
+							_maskData[i][j] = 1;
+					}
+				}
+				
+				int numOfPoints = maskData->getArrayItemCount( "points" );
+				for( i=0; i<numOfPoints; i++ ) {
+					cs::CSJsonDictionary *point = maskData->getSubItemFromArray( "points", i );
+					
+					int x = point->getItemIntValue( "x", _visibleSize.width/2 );
+					int y = point->getItemIntValue( "y", _visibleSize.height/2 );
+					_vertexInRoute.push_back(CCPoint(x, y));
+					
+					CC_SAFE_DELETE( point );
 				}
 			}
-
-			int numOfPoints = maskData->getArrayItemCount( "points" );
-			for( i=0; i<numOfPoints; i++ ) {
-				cs::CSJsonDictionary *point = maskData->getSubItemFromArray( "points", i );
-			
-				int x = point->getItemIntValue( "x", _visibleSize.width/2 );
-				int y = point->getItemIntValue( "y", _visibleSize.height/2 );
-				_vertexInRoute.push_back(CCPoint(x, y));
-
-				CC_SAFE_DELETE( point );
-			}
+			CC_SAFE_DELETE(maskData);
 		}
-		CC_SAFE_DELETE( maskData );
 
         CC_SAFE_DELETE(jsonDict);
     } while (0);
@@ -175,7 +196,6 @@ bool DrawingScene::init()
 	this->addChild(back, 0);
 	
 	
-	LoadData();
 	_checkPointSpriteArray = CCArray::create();
 	_checkPointSpriteArray->retain();
 	int i, j;
@@ -350,6 +370,6 @@ void DrawingScene::afterShowingMessagebox(CCNode *pSender)
 {
 	this->removeChild( pSender );
 	
-	CCScene *pScene = DrawingScene::scene();
+	CCScene *pScene = DrawingScene::scene(_nowSceneID);
 	CCDirector::sharedDirector()->replaceScene(CCTransitionPageTurn::create(1, pScene, true));
 }

@@ -1,7 +1,22 @@
 {
 	"data" : [
 		{
-			"mask_image" : "mask_circle.png",
+			"id" : 1,
+			"mask_image" : "mask1.png",
+			"points" : [
+				{
+					"x" : 630,
+					"y" : 110
+				},
+				{
+					"x" : 630,
+					"y" : 600
+				}
+			]
+		},
+		{
+			"id" : 3,
+			"mask_image" : "mask3.png",
 			"points" : [
 				{
 					"x" : 600,

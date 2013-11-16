@@ -17,7 +17,7 @@ public:
     virtual bool init();  
 
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
-    static cocos2d::CCScene* scene();
+    static cocos2d::CCScene* scene(int sceneID);
     
 	void update(float dt);
     void ccTouchesMoved(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent);
@@ -32,12 +32,13 @@ public:
     
     
 private:
-	void LoadData();
+	void LoadData( int sceneID );
 	void Restart();
     void CheckBoard();
 
 	CCSize _visibleSize;
 	CCPoint _origin;
+	int _nowSceneID;
 
     cocos2d::CCRenderTexture *_board;
     cocos2d::CCSprite *_brush;
