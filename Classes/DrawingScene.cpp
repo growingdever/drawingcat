@@ -85,7 +85,7 @@ void DrawingScene::LoadData()
     } while (0);
 }
 
-void DrawingScene::ResetCheckPoint()
+void DrawingScene::Restart()
 {
 	int i, j;
 	for( i=0; i<_checkPointSpriteArray->count(); i++ ) {
@@ -98,6 +98,11 @@ void DrawingScene::ResetCheckPoint()
 		_checkPointSpriteArray->insertObject( newSpr, i );
 		this->addChild( newSpr, 11 );
 	}
+	_nextVertexIndex = 0;
+	
+	_touches.clear();
+	
+	_board->clear(0, 0, 0, 0);
 }
 
 // on "init" you need to initialize your instance
@@ -220,12 +225,17 @@ bool DrawingScene::init()
 }
 
 
+void DrawingScene::update(float dt)
+{
+	
+}
+
+
 void DrawingScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 {
     CCTouch *touch = (CCTouch *)pTouches->anyObject();
     CCPoint location = touch->getLocationInView();
     location = CCDirector::sharedDirector()->convertToGL(location);
-//	CCLog("TOUCH (%.2f %.2f)", location.x, location.y);
     
     _board->begin();
     
@@ -245,7 +255,6 @@ void DrawingScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 	CCPoint nextVertex = _vertexInRoute[_nextVertexIndex];
 	CCRect vertexCollisionCheckRect = CCRectMake( nextVertex.x - 32, nextVertex.y - 32, 64, 64 );
 	if( vertexCollisionCheckRect.containsPoint( location ) ) {
-		CCLog( "containsPoint" );
 		CCSprite *old = dynamic_cast<CCSprite*>(_checkPointSpriteArray->objectAtIndex( _nextVertexIndex ));
 		_checkPointSpriteArray->removeObjectAtIndex( _nextVertexIndex );
 		this->removeChild( old, 11 );
@@ -297,49 +306,24 @@ void DrawingScene::CheckBoard()
 	if( maskImage->hasAlpha() )
 		byte_num++;
 	
-	bool maskData[720][1280];
-	unsigned char *data = maskImage->getData();
-	int i, j;
-	int w = maskImage->getWidth();
-	int h = maskImage->getHeight();
-	for( i=0; i<h; i++ )
-    {
-        for( j=0; j<w; j++ )
-        {
-            unsigned char *pixel = data + (i * w + j) * byte_num;
-			
-			// You can see/change pixels' RGBA value(0-255) here !
-            unsigned char r = *pixel;
-//            unsigned char g = *(pixel + 1);
-//            unsigned char b = *(pixel + 2);
-//            unsigned char a = *(pixel + 3);
-			
-			if( r == 0 ) // if this pixel is black
-				maskData[i][j] = 0;
-			else // if this pixel is white
-				maskData[i][j] = 1;
-        }
-    }
-	
 	int size = _touches.size();
 	CCPoint start = _touches[0];
 	CCPoint end = _touches[size-1];
-	
+	int i;
 	for( i=0; i<size; i++ )
 	{
 		CCPoint p = _touches[i];
 		int x = (int)(p.x * CCDirector::sharedDirector()->getContentScaleFactor());
 		int y = (int)(p.y * CCDirector::sharedDirector()->getContentScaleFactor());
 		
-		if( maskData[y][x] == 0 ) {
+		if( _maskData[y][x] == 0 ) {
 			CCMessageBox( "Fail!", "System" );
+			Restart();
 			return;
 		}
 	}
 	
 	
-	//CCMessageBox( "Success!", "System" );
-
 	CCSprite *msg = CCSprite::create( "praise.png" );
 	msg->setPosition( ccp( _visibleSize.width/2, _visibleSize.height/2 ) );
 	msg->setZOrder( 10 );

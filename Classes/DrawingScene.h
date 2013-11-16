@@ -19,6 +19,7 @@ public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::CCScene* scene();
     
+	void update(float dt);
     void ccTouchesMoved(cocos2d::CCSet* pTouches, cocos2d::CCEvent* pEvent);
     
     // a selector callback
@@ -32,7 +33,7 @@ public:
     
 private:
 	void LoadData();
-	void ResetCheckPoint();
+	void Restart();
 
 	CCSize _visibleSize;
 	CCPoint _origin;
