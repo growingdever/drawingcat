@@ -56,28 +56,27 @@ bool MainMenuScene::init()
 													  this,
 													  menu_selector(MainMenuScene::menuClickCallback));
 	pItem2->setPosition(ccp(_visibleSize.width * 0.17, _visibleSize.height * 0.48	));
-	pItem2->setTag(ID_BUTTON_DRAWING_LINE);
+	pItem2->setTag(ID_BUTTON_DRAWING_FIGURE);
 	
 	CCMenuItemImage *pItem3 = CCMenuItemImage::create("menu_hangul.png",
 													  "menu_hangul_selected.png",
 													  this,
 													  menu_selector(MainMenuScene::menuClickCallback));
 	pItem3->setPosition(ccp(_visibleSize.width * 0.4, _visibleSize.height * 0.25));
-	pItem3->setTag(ID_BUTTON_DRAWING_LINE);
+	pItem3->setTag(ID_BUTTON_DRAWING_HANGUL);
 	
 	CCMenuItemImage *pItem4 = CCMenuItemImage::create("menu_alphabet.png",
 													  "menu_alphabet_selected.png",
 													  this,
 													  menu_selector(MainMenuScene::menuClickCallback));
 	pItem4->setPosition(ccp(_visibleSize.width * 0.8, _visibleSize.height * 0.35));
-	pItem4->setTag(ID_BUTTON_DRAWING_LINE);
+	pItem4->setTag(ID_BUTTON_DRAWING_ALPHABET);
 	
 	CCMenu *pMenu = CCMenu::create(pItem1, pItem2, pItem3, pItem4, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu);
 	
 	SetMessageBoxNeedMoney();
-	_messageBoxLayer->setVisible(true);
 
 
     return true;
@@ -101,9 +100,11 @@ void MainMenuScene::menuClickCallback(CCObject* pSender)
 			break;
 			
 		case ID_BUTTON_DRAWING_HANGUL:
+			_messageBoxLayer->setVisible(true);
 			break;
 			
 		case ID_BUTTON_DRAWING_ALPHABET:
+			_messageBoxLayer->setVisible(true);
 			break;
 			
 		case ID_BUTTON_CLOSE:
