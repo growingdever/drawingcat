@@ -245,6 +245,8 @@ bool DrawingScene::init()
     this->setTouchEnabled(true);
 
 	_touches.clear();
+	
+	_dieFlag = false;
 
     return true;
 }
@@ -261,6 +263,11 @@ void DrawingScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
     CCTouch *touch = (CCTouch *)pTouches->anyObject();
     CCPoint location = touch->getLocationInView();
     location = CCDirector::sharedDirector()->convertToGL(location);
+	
+	if( _maskData[(int)location.y][(int)location.x] == 0 && !_dieFlag ) {
+		_dieFlag = true;
+		ShowFailMessage();
+	}
     
     _board->begin();
     
@@ -374,4 +381,21 @@ void DrawingScene::afterShowingMessagebox(CCNode *pSender)
 	
 	CCScene *pScene = DrawingScene::scene(_nowSceneID);
 	CCDirector::sharedDirector()->replaceScene(CCTransitionPageTurn::create(1, pScene, false));
+}
+
+void DrawingScene::ShowFailMessage()
+{
+	CCSprite *msg = CCSprite::create( "messagebox_replay.png" );
+	msg->setPosition( ccp( _visibleSize.width/2, _visibleSize.height/2 ) );
+	msg->setZOrder( 10 );
+	msg->setScale( 0 );
+	msg->runAction(
+				   CCSequence::create(
+									  CCScaleTo::create( 0.3, 0.5 ),
+									  CCDelayTime::create( 0.5 ),
+									  CCScaleTo::create( 0.2, 0 ),
+									  CCCallFuncN::create( this, callfuncN_selector(DrawingScene::afterShowingMessagebox) ),
+									  NULL ) );
+	
+	this->addChild(msg);
 }

@@ -26,6 +26,8 @@ public:
     void menuClickCallback(CCObject* pSender);
 
 	void afterShowingMessagebox(CCNode *pSender);
+	
+	void ShowFailMessage();
     
     // implement the "static node()" method manually
     CREATE_FUNC(DrawingScene);
@@ -45,6 +47,7 @@ private:
 	cocos2d::CCSprite *_character;
 
 	bool _maskData[DEVICE_HEIGHT][DEVICE_WIDTH];
+	bool _dieFlag;
 
 
 	vector<cocos2d::CCPoint> _touches;
