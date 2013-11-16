@@ -327,12 +327,6 @@ void DrawingScene::menuClickCallback(CCObject* pSender)
 
 void DrawingScene::CheckBoard()
 {
-	CCImage *maskImage = new CCImage();
-	maskImage->initWithImageFile("mask.png");
-	int byte_num = 3;
-	if( maskImage->hasAlpha() )
-		byte_num++;
-	
 	int size = _touches.size();
 	CCPoint start = _touches[0];
 	CCPoint end = _touches[size-1];
@@ -371,5 +365,5 @@ void DrawingScene::afterShowingMessagebox(CCNode *pSender)
 	this->removeChild( pSender );
 	
 	CCScene *pScene = DrawingScene::scene(_nowSceneID);
-	CCDirector::sharedDirector()->replaceScene(CCTransitionPageTurn::create(1, pScene, true));
+	CCDirector::sharedDirector()->replaceScene(CCTransitionPageTurn::create(1, pScene, false));
 }
