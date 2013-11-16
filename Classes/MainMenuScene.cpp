@@ -1,5 +1,6 @@
 #include "MainMenuScene.h"
 #include "cocos-ext.h"
+#include "DrawingScene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -94,6 +95,7 @@ void MainMenuScene::menuClickCallback(CCObject* pSender)
     int tag = ((CCNode*)pSender)->getTag();
     switch (tag) {
 		case ID_BUTTON_DRAWING_LINE:
+			CCDirector::sharedDirector()->replaceScene(CCTransitionPageTurn::create(1, DrawingScene::scene(1), false));
 			break;
 			
 		case ID_BUTTON_DRAWING_FIGURE:
