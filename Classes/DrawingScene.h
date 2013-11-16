@@ -42,6 +42,7 @@ private:
 
     cocos2d::CCRenderTexture *_board;
     cocos2d::CCSprite *_brush;
+	cocos2d::CCSprite *_character;
 
 	bool _maskData[DEVICE_HEIGHT][DEVICE_WIDTH];
 

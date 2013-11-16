@@ -208,6 +208,10 @@ bool DrawingScene::init()
 		_checkPointSpriteArray->addObject( spr );
 	}
 	_nextVertexIndex = 0;
+	
+	_character = CCSprite::create("character.png");
+	_character->cocos2d::CCNode::setPosition(CCDirector::sharedDirector()->convertToGL(_vertexInRoute[0]));
+	this->addChild(_character, 12);
 
 	
 	CCImage *visualImage = new CCImage;
@@ -267,6 +271,8 @@ void DrawingScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 	
 	location.y = _visibleSize.height - location.y;
 	_touches.push_back(location);
+	
+	_character->setPosition(CCDirector::sharedDirector()->convertToUI(location));
 
 	
 	if( _nextVertexIndex >= _vertexInRoute.size() )
