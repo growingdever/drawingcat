@@ -123,6 +123,11 @@ bool DrawingScene::init()
     //    you may modify it.
 
     // add a "close" icon to exit the progress. it's an autorelease object
+	
+	_menuLayer = CCLayer::create();
+	_menuLayer->setPosition(CCPointZero);
+	this->addChild(_menuLayer, 10);
+	
     CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
                                         "CloseNormal.png",
                                         "CloseSelected.png",
@@ -152,7 +157,9 @@ bool DrawingScene::init()
 	// create menu, it's an autorelease object
     CCMenu* pMenu = CCMenu::create(pCloseItem, pClearButton, pCheckButton, NULL);
     pMenu->setPosition(CCPointZero);
-    this->addChild(pMenu, 10);
+    _menuLayer->addChild(pMenu, 10);
+	
+
 
     /////////////////////////////
     // 3. add your codes below...

@@ -34,6 +34,7 @@ public:
 private:
 	void LoadData();
 	void Restart();
+    void CheckBoard();
 
 	CCSize _visibleSize;
 	CCPoint _origin;
@@ -49,8 +50,9 @@ private:
 	vector<cocos2d::CCPoint> _vertexInRoute;
 	int _nextVertexIndex;
 	cocos2d::CCArray *_checkPointSpriteArray;
-
-    void CheckBoard();
+	
+	
+	cocos2d::CCLayer *_menuLayer;
     
 };
 
