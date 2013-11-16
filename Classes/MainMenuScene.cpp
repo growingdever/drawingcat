@@ -5,6 +5,10 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 const int ID_BUTTON_CLOSE = 10;
+const int ID_BUTTON_DRAWING_LINE = 1;
+const int ID_BUTTON_DRAWING_FIGURE = 2;
+const int ID_BUTTON_DRAWING_HANGUL = 3;
+const int ID_BUTTON_DRAWING_ALPHABET = 4;
 
 CCScene* MainMenuScene::scene()
 {
@@ -39,6 +43,39 @@ bool MainMenuScene::init()
 	background->setPosition(_visibleSize/2);
 	this->addChild(background);
 	
+	
+	CCMenuItemImage *pItem1 = CCMenuItemImage::create("menu_line.png",
+													  "menu_line_selected.png",
+													  this,
+													  menu_selector(MainMenuScene::menuClickCallback));
+	pItem1->setPosition(ccp(_visibleSize.width * 0.35, _visibleSize.height * 0.8));
+	pItem1->setTag(ID_BUTTON_DRAWING_LINE);
+	
+	CCMenuItemImage *pItem2 = CCMenuItemImage::create("menu_figure.png",
+													  "menu_figure_selected.png",
+													  this,
+													  menu_selector(MainMenuScene::menuClickCallback));
+	pItem2->setPosition(ccp(_visibleSize.width * 0.17, _visibleSize.height * 0.48	));
+	pItem2->setTag(ID_BUTTON_DRAWING_LINE);
+	
+	CCMenuItemImage *pItem3 = CCMenuItemImage::create("menu_hangul.png",
+													  "menu_hangul_selected.png",
+													  this,
+													  menu_selector(MainMenuScene::menuClickCallback));
+	pItem3->setPosition(ccp(_visibleSize.width * 0.4, _visibleSize.height * 0.25));
+	pItem3->setTag(ID_BUTTON_DRAWING_LINE);
+	
+	CCMenuItemImage *pItem4 = CCMenuItemImage::create("menu_alphabet.png",
+													  "menu_alphabet_selected.png",
+													  this,
+													  menu_selector(MainMenuScene::menuClickCallback));
+	pItem4->setPosition(ccp(_visibleSize.width * 0.8, _visibleSize.height * 0.35));
+	pItem4->setTag(ID_BUTTON_DRAWING_LINE);
+	
+	CCMenu *pMenu = CCMenu::create(pItem1, pItem2, pItem3, pItem4, NULL);
+	pMenu->setPosition(CCPointZero);
+	this->addChild(pMenu);
+	
 	SetMessageBoxNeedMoney();
 	_messageBoxLayer->setVisible(true);
 
@@ -57,14 +94,17 @@ void MainMenuScene::menuClickCallback(CCObject* pSender)
 {
     int tag = ((CCNode*)pSender)->getTag();
     switch (tag) {
-        case 1: // close button
-            break;
-            
-        case 2: // clear button
-            break;
-            
-        case 3: // check button
-            break;
+		case ID_BUTTON_DRAWING_LINE:
+			break;
+			
+		case ID_BUTTON_DRAWING_FIGURE:
+			break;
+			
+		case ID_BUTTON_DRAWING_HANGUL:
+			break;
+			
+		case ID_BUTTON_DRAWING_ALPHABET:
+			break;
 			
 		case ID_BUTTON_CLOSE:
 			_messageBoxLayer->setVisible(false);
