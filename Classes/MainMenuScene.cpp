@@ -65,6 +65,9 @@ bool MainMenuScene::init()
 													  menu_selector(MainMenuScene::menuClickCallback));
 	pItem3->setPosition(ccp(_visibleSize.width * 0.4, _visibleSize.height * 0.25));
 	pItem3->setTag(ID_BUTTON_DRAWING_HANGUL);
+	CCSprite *lock1 = CCSprite::create("lock_icon.png");
+	lock1->setPosition(ccp(pItem3->getContentSize().width/2, pItem3->getContentSize().height/2));
+	pItem3->addChild(lock1);
 	
 	CCMenuItemImage *pItem4 = CCMenuItemImage::create("menu_alphabet.png",
 													  "menu_alphabet_selected.png",
@@ -72,12 +75,15 @@ bool MainMenuScene::init()
 													  menu_selector(MainMenuScene::menuClickCallback));
 	pItem4->setPosition(ccp(_visibleSize.width * 0.8, _visibleSize.height * 0.35));
 	pItem4->setTag(ID_BUTTON_DRAWING_ALPHABET);
+	CCSprite *lock2 = CCSprite::create("lock_icon.png");
+	lock2->setPosition(ccp(pItem4->getContentSize().width/2, pItem4->getContentSize().height/2));
+	pItem4->addChild(lock2);
 	
 	CCMenu *pMenu = CCMenu::create(pItem1, pItem2, pItem3, pItem4, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu);
 	
-//	SetMessageBoxNeedMoney();
+	SetMessageBoxNeedMoney();
 
 
     return true;
@@ -139,4 +145,6 @@ void MainMenuScene::SetMessageBoxNeedMoney()
 	CCMenu *pMenu = CCMenu::create( closebutton, NULL );
 	pMenu->setPosition(CCPointZero);
 	_messageBoxLayer->addChild(pMenu);
+	
+	_messageBoxLayer->setVisible(false);
 }
