@@ -262,12 +262,12 @@ void DrawingScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 {
     CCTouch *touch = (CCTouch *)pTouches->anyObject();
     CCPoint location = touch->getLocationInView();
-    location = CCDirector::sharedDirector()->convertToGL(location);
-	
 	if( _maskData[(int)location.y][(int)location.x] == 0 && !_dieFlag ) {
 		_dieFlag = true;
 		ShowFailMessage();
 	}
+	
+    location = CCDirector::sharedDirector()->convertToGL(location);
     
     _board->begin();
     
