@@ -55,21 +55,24 @@ void DrawingScene::LoadData( int sceneID )
 		std::string strFileName(pszFileName);
         pData = (char*)(cocos2d::CCFileUtils::sharedFileUtils()->getFileData(pszFileName, "r", &size));
         CC_BREAK_IF(pData == NULL || strcmp(pData, "") == 0);
+        
+        std::string load_str((const char*)pData, size);
+		CC_SAFE_DELETE_ARRAY(pData);
 
 		// Make json object by file content
-        cs::CSJsonDictionary *jsonDict = new cs::CSJsonDictionary();
-        jsonDict->initWithDescription(pData);
-
-		int data_count = jsonDict->getArrayItemCount( "data" );
-		
+        rapidjson::Document jsonDict;
+        jsonDict.Parse<0>(load_str.c_str());
+        
+        const rapidjson::Value& maskDataArray = jsonDict["data"];
+        int data_count = maskDataArray.Size();
 		int id = 0;
 		for( i = 0; i < data_count; i ++ ) {
-			cs::CSJsonDictionary *maskData = jsonDict->getSubItemFromArray( "data", i );
-			int id = maskData->getItemIntValue("id", 0);
+            const rapidjson::Value& maskData = maskDataArray[i];
+            int id = DICTOOL->getIntValue_json( maskData, "id", 0 );
 			CCLog("sceneid:%d   i:%d  id:%d", sceneID, i, id);
 			if( id == sceneID ) {
 				// Initialize mask data from mask image
-				const char *mask_image_path = maskData->getItemStringValue( "mask_image" );
+                const char *mask_image_path = DICTOOL->getStringValue_json( maskData, "mask_image" );
 				CCImage *maskImage = new CCImage();
 				maskImage->initWithImageFile(mask_image_path);
 				int byte_num = 3;
@@ -93,22 +96,17 @@ void DrawingScene::LoadData( int sceneID )
 					}
 				}
 				
-				int numOfPoints = maskData->getArrayItemCount( "points" );
+				int numOfPoints = maskData["points"].Size();
 				for( i=0; i<numOfPoints; i++ ) {
-					cs::CSJsonDictionary *point = maskData->getSubItemFromArray( "points", i );
-					
-					int x = point->getItemIntValue( "x", _visibleSize.width/2 );
-					int y = point->getItemIntValue( "y", _visibleSize.height/2 );
+                    const rapidjson::Value& point = maskDataArray[i];
+					int x = DICTOOL->getIntValue_json( point, "x", _visibleSize.width/2 );
+					int y = DICTOOL->getIntValue_json( point, "y", _visibleSize.width/2 );
 					_vertexInRoute.push_back(CCPoint(x, y));
-					
-					CC_SAFE_DELETE( point );
 				}
 				break;
 			}
-			CC_SAFE_DELETE(maskData);
 		}
 
-        CC_SAFE_DELETE(jsonDict);
     } while (0);
 }
 
